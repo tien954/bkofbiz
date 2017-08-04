@@ -22,7 +22,7 @@
 		<div class="side-bar-selection">
 			<div class="side-bar-item-container">
 				<label class="tree-toggle nav-header">
-					<span class="glyphicon glyphicon-plus"></span>
+					<span class="glyphicon glyphicon-minus"></span>
 					Li lich khoa hoc
 				</label>
 				<ul class="researchdeclaration nav-list tree">
@@ -33,7 +33,13 @@
 						<a href="department-management">Quan ly bo  mon</a>
 					</li>
 					<li>
+
 						<a href="foreign-language">${uiLabelMap.BkEunivForeignLanguage}</a>
+					</li>
+					<li>
+
+						<a href="education-progress">${uiLabelMap.BkEunivEducationProgress}</a>
+
 					</li>
 				</ul>
 			</div>
