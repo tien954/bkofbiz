@@ -27,5 +27,36 @@
         <value xml:lang="vi">Trang chủ</value>
     </property>
     
+     <property key="BkEunivForeignLanguage">
+        <value xml:lang="en">Foreign Language</value>
+        <value xml:lang="vi">Trình độ ngoại ngữ</value>
+    </property>
+    
+     <property key="BkEunivAdd">
+        <value xml:lang="en">Add</value>
+        <value xml:lang="vi">Thêm</value>
+    </property>
+    
+    
+     <property key="BkEunivRemove">
+        <value xml:lang="en">Remove</value>
+        <value xml:lang="vi">Xóa</value>
+    </property>
+    
+     <property key="BkEunivEdit">
+        <value xml:lang="en">Edit</value>
+        <value xml:lang="vi">Sửa</value>
+    </property>
+    
+    <property key="BkEunivUpdate">
+        <value xml:lang="en">Update</value>
+        <value xml:lang="vi">Cập nhật</value>
+    </property>
+    
+    
+    <property key="BkEunivAddRow">
+        <value xml:lang="en">Add</value>
+        <value xml:lang="vi">Thêm mới</value>
+    </property>
     
 </resource>

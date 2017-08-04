@@ -50,5 +50,49 @@
     	<attribute name="departments" mode="OUT" type="List"></attribute>
 
     </service>
+        
+     <service name="getForeignLanguage" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.foreignlanguage.ForeignLanguage" invoke="getForeignLanguage">
+    	<attribute name="foreignLanguageId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="staffId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="listen" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="speaking" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="reading" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="writing" mode="IN" type="String" optional="true"></attribute> 	 
+    	<attribute name="foreignLanguage" mode="OUT" type="List"></attribute>
+    	  	
+    </service>
+    
+     <service name="createAForeignLanguage" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.foreignlanguage.ForeignLanguage" invoke="createAForeignLanguage">
+       <attribute name="staffId" mode="IN" type="String"></attribute>
+       <attribute name="listen" mode="IN" type="String"></attribute>
+       <attribute name="speaking" mode="IN" type="String"></attribute>
+       <attribute name="reading" mode="IN" type="String"></attribute>
+       <attribute name="writing" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="foreignLanguage" mode="OUT" type="Map"></attribute>
+    </service>
+    
+    
+    <service name="updateForeignLanguage" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.foreignlanguage.ForeignLanguage" invoke="updateForeignLanguage">
+    	<attribute name="foreignLanguageId" mode="IN" type="String"></attribute>
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="listen" mode="IN" type="String"></attribute>
+    	<attribute name="speaking" mode="IN" type="String"></attribute>
+    	<attribute name="reading" mode="IN" type="String"></attribute>
+    	<attribute name="writing" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="result" mode="OUT" type="String"></attribute>
+    </service>
+    
+     <service name="deleteForeignLanguage" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.foreignlanguage.ForeignLanguage" invoke="deleteForeignLanguage">
+    	<attribute name="foreignLanguageId" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="result" mode="OUT" type="String"></attribute>
+    </service>
+    
     
 </services>
