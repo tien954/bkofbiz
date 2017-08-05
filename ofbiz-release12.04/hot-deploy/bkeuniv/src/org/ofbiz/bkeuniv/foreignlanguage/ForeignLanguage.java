@@ -1,10 +1,13 @@
 package src.org.ofbiz.bkeuniv.foreignlanguage;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.UtilMisc;
@@ -23,29 +26,43 @@ public class ForeignLanguage{
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher localDispatcher = ctx.getDispatcher();
 		
-		String foreignLanguageId = (String)context.get("foreignLanguageId");
-		String staffId = (String)context.get("staffId");
-		String listen = (String)context.get("listen");
-		String speaking = (String)context.get("speaking");
-		String reading = (String)context.get("reading");
-		String writing = (String)context.get("writing");
+		String[] keys = {"foreignLanguageId", "staffId", "listen", "speaking", "reading", "writing"};
 		
 		try {
-			Map<String, Object> result = ServiceUtil.returnSuccess();
-			EntityCondition entity;
-			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-			List<GenericValue> list;
-			if(foreignLanguageId == null) {
-				list = delegator.findList("ForeignLanguage", null, null, null, findOptions, true);
-			} else {				
-				entity = EntityCondition.makeCondition("foreignLanguageId", EntityOperator.EQUALS, foreignLanguageId);				
-				list = delegator.findList("ForeignLanguage", entity, null, null, findOptions, true);	
-			}
 			
-			result.put("foreignLanguage", list);
+			EntityCondition entity = null;
+			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+			Map<String, Object> fields = new HashMap<String, Object>();;
+			for(String key: keys) {
+				Object el = context.get(key);
+				if(!(el == null||el==(""))) {
+					if(key=="listen") {
+						fields.put(key, Date.valueOf((String) el));
+					} else {
+						fields.put(key, el);
+					}
+				}
+		}
+			
+			List<GenericValue> list = delegator.findByAnd("ForeignLanguage", fields);
+			Map<String, Object> result = ServiceUtil.returnSuccess();
+			
+			List<Map> listForeignLanguage = FastList.newInstance();
+			for(GenericValue el: list) {
+				Map<String, Object> mapForeignLanguage = FastMap.newInstance();
+				mapForeignLanguage.put("foreignLanguageId", el.getString("foreignLanguageId"));
+				mapForeignLanguage.put("staffId", el.getString("staffId"));
+				mapForeignLanguage.put("listen", el.getString("listen"));
+				mapForeignLanguage.put("speaking", el.getString("speaking"));
+				mapForeignLanguage.put("reading", el.getString("reading"));
+				mapForeignLanguage.put("writing", el.getString("writing"));
+				listForeignLanguage.add(mapForeignLanguage);
+			}
+			result.put("foreignLanguage", listForeignLanguage);
 			return result;
 		
 		} catch (Exception e) {
+			System.out.print("Foreign Language Error");
 			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
 			return rs;
 		}
