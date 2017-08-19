@@ -17,6 +17,7 @@ modal.prototype._getSelect = function (selector) {
 }
 
 modal.prototype._date = function(value, edit, id){
+	var _id = "#"+id;
 	return '<input type="text" class=" date form-control"' +
 					'id="' + id+'"' +
 					(edit?"":"disabled ") +
@@ -25,7 +26,7 @@ modal.prototype._date = function(value, edit, id){
 					'>' +
     			'<script type="text/javascript">'+
     				'$(function () {'+
-    					'$("#'+id+'").datepicker({format: "dd/mm/yyyy"});'+
+    					'$("'+[this.id, _id].join(" ")+'").datepicker({format: "dd/mm/yyyy"});'+
         		'});'+
         		'</script>'
 }
@@ -43,7 +44,7 @@ modal.prototype._select = function(value, edit, id, option) {
 	var maxItem = option.maxItem||1;
 	var script = '<script type="text/javascript">'+
 					'$(function () {'+
-						'$("'+_id+'").selectize({'+
+						'$("'+[this.id, _id].join(" ")+'").selectize({'+
 							'maxItems: ' + maxItem + ', '+
 							'sortField: "text"'+
 						'});'+
@@ -60,7 +61,8 @@ modal.prototype.setting = function(option) {
 	this.option = option;
 	this._data = option.data;
 	this.columns = option.columns;
-	
+	this._action = option.action;
+	console.log(this._action)
 	for(var i = 0, len = this.columns.length; i < len; ++i) {
 		var column = this.columns[i];
 		column.id = column.value.replace(/\s/g, '-').toLowerCase();
@@ -91,8 +93,80 @@ modal.prototype.setting = function(option) {
 	return this;
 }
 
-modal.prototype.render = function() {
+
+modal.prototype.action = function() {
+	var _ = this;
+	openLoader();
+	$.ajax({
+	    url: _._action.url,
+	    type: 'post',
+	    data: _.data(),
+	    datatype:"json",
+	    success: function(data) {
+	    	if(!!_._action.update && typeof _._action.update === "function") {
+	    		_._action.update(data)
+	    	} else {
+	    		_._updateDefault(data[_._action.fieldDataResult], data.message);
+	    	}
+	    }, error: function(err) {
+			setTimeout(function() {
+				closeLoader();
+				alertify.error(JSON.stringify(err));
+			}, 500);
+			console.log(err);
+		}
+	})
+}
 	
+modal.prototype._updateDefault = function(data, message) {
+	if(!!this._action.dataTable) {
+		var table = this._action.dataTable;
+		var _ = this;
+		var keys = this._action.keys||[];
+		var element = table.rows().indexes().data().filter(function(e, index) {
+			var check = keys.reduce(function(acc, curr) {
+				return acc&&(e[curr]==data[curr]);
+			}, true);
+			
+			if(check) {
+				e.index = index;
+				return true;
+			}
+		})[0]
+		if(!!element&&(typeof element == "object")) {
+			Object.keys(element).forEach(function(key, index){
+				element[key] = data[key];
+			})
+			table.row(element.index).data(element);
+			$([_.id, "#modal-template"].join(" ")).modal('hide');
+
+	    	setTimeout(function() {
+				closeLoader();
+				alertify.success(message);
+			}, 500);
+		} else {
+			table.row.add(data).draw();
+	    	
+			this.columns.forEach(function(column, index) {
+				$([_.id,"#"+column.id].join(" ")).val("");
+			})
+			setTimeout(function() {
+				closeLoader();
+				alertify.success(message);
+			}, 500);
+			
+		}
+			
+		
+	} else {
+		setTimeout(function() {
+			closeLoader();
+			alertify.error('No found data table');
+		}, 500);
+	}
+}
+
+modal.prototype.render = function() {
 	var html = 
 		'<div class="modal fade" id="modal-template" role="dialog">'+
 		  '<div class="modal-dialog">'+
@@ -106,7 +180,7 @@ modal.prototype.render = function() {
 		      	'<div class="container-fluid">'+this.columns.reduce(function(acc, curr){return acc + curr.html}, "")+'</div>'+
 		      '</div>'+
 		      '<div class="modal-footer">'+
-		      	'<button type="button" class="btn btn-success" onclick="'+this.option.action.func+'" >'+this.option.action.name+'</button>'+
+		      	'<button type="button" class="btn btn-success" id="modal-action">'+(this._action.name||"Action")+'</button>'+
 		   		'<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'+
 		      '</div>'+
 		    '</div>'+
@@ -114,6 +188,10 @@ modal.prototype.render = function() {
 		'</div>';
 	$(this.id).children().remove()
 	$(this.id).append(html);
+	var _ = this;
+	$( this.id +" #modal-action" ).click(function() {
+	  _.action();
+	});
 	return this;
 }
 
@@ -163,3 +241,4 @@ modal.prototype._mergeData = function(base, compare) {
 
 	return base
 }
+
