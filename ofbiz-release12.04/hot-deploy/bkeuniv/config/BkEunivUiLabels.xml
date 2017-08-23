@@ -35,6 +35,16 @@
         <value xml:lang="vi">Quản lý quá trình đào tạo</value>
     </property>
     
+     <property key="BkEunivResearchDomain">
+        <value xml:lang="en">Manage Research Domain</value>
+        <value xml:lang="vi">Quản lý lĩnh vực nghiên cứu</value>
+    </property>
+    
+     <property key="BkEunivResearchSpeciality">
+        <value xml:lang="en">Manage Research Speciality</value>
+        <value xml:lang="vi">Quản lý chuyên ngành nghiên cứu</value>
+    </property>
+    
     <property key="BkEunivAdd">
         <value xml:lang="en">Add</value>
         <value xml:lang="vi">Thêm</value>

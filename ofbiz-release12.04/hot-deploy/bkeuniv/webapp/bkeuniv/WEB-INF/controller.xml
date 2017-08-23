@@ -200,6 +200,74 @@
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
+	
+	<request-map uri="research-domain-management">
+    	<security https="true" auth="true"/>
+    	<response name="success" type="view" value="view-research-domain-management"/>    
+    </request-map>
+    
+    <request-map uri="get-research-domain-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="getResearchDomain"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+    
+    <request-map uri="create-research-domain-management">
+		<security https="true" auth="true"/>		
+		<event type="java" invoke="createResearchDomainRequestResponse" path="src.org.ofbiz.bkeuniv.researchdomain.ResearchDomain"></event>		 
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="update-research-domain-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="updateResearchDomain"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="delete-research-domain-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="deleteResearchDomain"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	
+	
+	<request-map uri="research-speciality-management">
+    	<security https="true" auth="true"/>
+    	<response name="success" type="view" value="view-research-speciality-management"/>    
+    </request-map>
+    
+    <request-map uri="get-research-speciality-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="getResearchSpeciality"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+    
+    <request-map uri="create-research-speciality-management">
+		<security https="true" auth="true"/>		
+		<event type="java" invoke="createResearchSpecialityRequestResponse" path="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality"></event>		 
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="update-research-speciality-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="updateResearchSpeciality"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
+	
+	<request-map uri="delete-research-speciality-management">
+		<security https="true" auth="true"/>
+		<event type="service" invoke="deleteResearchSpeciality"></event>
+		<response name="success" type="request" value="json"></response>
+		<response name="error" type="request" value="json"></response>
+	</request-map>
 
 
     <request-map uri="get-permission-functions">
@@ -221,5 +289,6 @@
     <view-map name="view-scientificserviceexperience" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#scientificserviceexperience"/>
     <view-map name="view-manage-education-progress" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#educationProgress"/>
     <view-map name="view-paper-declaration-staff" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#paperDeclaration"/>
+    <view-map name="view-research-domain-management" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#researchDomain"/>
     
 </site-conf>
