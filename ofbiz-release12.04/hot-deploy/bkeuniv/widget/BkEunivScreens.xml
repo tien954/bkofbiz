@@ -276,12 +276,11 @@
 		</section>
 	</screen>
 	
-	
 	<screen name="researchSpeciality">
 		<section>
 			<actions>
 				<entity-condition list="listStaffs" entity-name="ResearchSpeciality"></entity-condition>
-				<property-map resource="BkEunivResearchSpecialityManagementUiLabels" map-name="researchSpecialityUiLabelMap" global="true"/>
+				<property-map resource="BkEunivResearchSpecialityUiLabels" map-name="researchSpecialityUiLabelMap" global="true"/>
 			</actions>
 			<widgets>
 				<decorator-screen name="bkeuniv-global-decorator"
@@ -292,15 +291,18 @@
 							<html>
 								<html-template
 									location="component://bkeuniv/webapp/bkeuniv/researchspeciality/research-speciality.ftl" />
+									
 							</html>
 						</platform-specific>
 
 					</decorator-section>
 				</decorator-screen>
-
 			</widgets>
 		</section>
 	</screen>
+	
+	
+	
 
 
 </screens>
