@@ -29,6 +29,10 @@
 			<@pfObject object=a />,
 		<#elseif a?is_sequence>
 			<@pfArray array=a />,
+		<#elseif (a?string)?index_of("function")==0>
+			${a?replace("\n|\t", "", "r")},
+		<#elseif a?is_string>
+			'${a?replace("\n|\t", "", "r")}',
 		<#else>
 			'${a}',
 		</#if>
@@ -43,6 +47,10 @@
 			'${k}': <@pfObject object=object[k] />,
 		<#elseif object[k]?is_sequence>
 			'${k}': <@pfArray array=object[k] />,
+		<#elseif (object[k]?string)?index_of("function") == 0>
+			'${k}': ${object[k]?replace("\n|\t", "", "r")},
+		<#elseif object[k]?is_string>
+			'${k}': '${object[k]?string?replace("\n|\t", "", "r")}',
 		<#else>
 			'${k}': '${object[k]}',
 		</#if>
@@ -51,8 +59,8 @@
 </#macro>
 
 
-
-<#macro jqDataTable urlData urlUpdate urlAdd urlDelete keysId 
+<#macro jqDataTable urlData urlUpdate urlAdd urlDelete keysId
+		fnInfoCallback=""
 		dataFields=[]
 		columns=""
 		columnsChange = []
@@ -65,6 +73,7 @@
 		titleNew=""
 		titleDelete=""
 		jqTitle=""
+		contextmenu=true
 	>
 	<@jqMinimumLib />
 	
@@ -203,35 +212,60 @@
 			    	jqDataTable.table = $('#${id}-content').DataTable({
 			   		data: jqDataTable.data,
 					columns: <@pfArray array=columns />,
+					"columnDefs": [
+					<#assign index = 0 />
+					<#list columns as column>
+						<#assign c = {} />
+						
+						<#if column.render?has_content>
+				             <#assign c = c + {"render": column.render} />
+						</#if>
+						<#if column.width?has_content>
+				             <#assign c = c + {"width": column.width} />
+						</#if>
+						
+						<#if c?has_content>
+				             <#assign c = c + {"targets": index} />
+				             <@pfObject object=c />,
+						</#if>
+						
+						<#assign index = index + 1 />
+					</#list>
+					],
 					"scrollY": ${sizeTable}- $(".jqDataTable-title").innerHeight() - 165,
 					"scrollCollapse": true,
+					<#if fnInfoCallback?has_content>
+						"fnInfoCallback": ${fnInfoCallback?replace("\n|\t", "", "r")},
+					</#if>
 					"bJQueryUI": true
 			       });
-			       $(document).contextmenu({
-					    delegate: "#${id}-content td",
-					menu: [
-					  {title: '${uiLabelMap.BkEunivEdit}', cmd: "edit", uiIcon: "glyphicon glyphicon-edit"},
-					  {title: '${uiLabelMap.BkEunivRemove}', cmd: "delete", uiIcon: "glyphicon glyphicon-trash"}
-					],
-					select: function(event, ui) {
-						var el = ui.target.parent();
-						var data = jqDataTable.table.row( el ).data();
-						switch(ui.cmd){
-							case "edit":
-								jqChange(data)
-								break;
-							case "delete":
-								jqDelete(data);
-								break;
-							}
-						},
-						beforeOpen: function(event, ui) {
-							var $menu = ui.menu,
-								$target = ui.target,
-								extraData = ui.extraData;
-							ui.menu.zIndex(9999);
-					    }
-					  });
+			       <#if contextmenu>
+				       $(document).contextmenu({
+						    delegate: "#${id}-content td",
+						menu: [
+						  {title: '${uiLabelMap.BkEunivEdit}', cmd: "edit", uiIcon: "glyphicon glyphicon-edit"},
+						  {title: '${uiLabelMap.BkEunivRemove}', cmd: "delete", uiIcon: "glyphicon glyphicon-trash"}
+						],
+						select: function(event, ui) {
+							var el = ui.target.parent();
+							var data = jqDataTable.table.row( el ).data();
+							switch(ui.cmd){
+								case "edit":
+									jqChange(data)
+									break;
+								case "delete":
+									jqDelete(data);
+									break;
+								}
+							},
+							beforeOpen: function(event, ui) {
+								var $menu = ui.menu,
+									$target = ui.target,
+									extraData = ui.extraData;
+								ui.menu.zIndex(9999);
+						    }
+						  });
+					</#if>
 			    }
 			});
 		});

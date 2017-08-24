@@ -1,7 +1,6 @@
 var modal = function (id) {
 	this.id = id;
 }
-var test;
 
 modal.prototype._getDate = function (selector, format) {
     const [day, month, year] = $([this.id,selector].join(" ")).val().split(/\/|-|_|\|\s/);
@@ -49,11 +48,19 @@ modal.prototype._select = function(value, edit, id, option) {
 							'sortField: "text"'+
 						'});'+
 					'});'+
-				'</script>'
-	var option = value.map(function(op, index) {
-		var _selected = option.selected.indexOf(op[option.value])!== -1?"selected":"";
-		return '<option value="'+op[option.value]+'" '+_selected+'>'+op[option.name]+'</option>';
-	})
+				'</script>';
+	var option;
+	if(Object.prototype.toString.call( value ) === '[object Array]') {
+		option = option.source.map(function(op, index) {
+			var _selected = value.indexOf(op.value)!== -1?"selected":"";
+			return '<option value="'+op.value+'" '+_selected+'>'+op.name+'</option>';
+		})
+	} else {
+		option = option.source.map(function(op, index) {
+			var _selected = value === op.value?"selected":"";
+			return '<option value="'+op.value+'" '+_selected+'>'+op.name+'</option>';
+		})	
+	}
 	return '<select style="width: 70%" id="'+id+'" multiple>'+option.join("")+'</select>'+script;
 }
 
@@ -62,7 +69,6 @@ modal.prototype.setting = function(option) {
 	this._data = option.data;
 	this.columns = option.columns;
 	this._action = option.action;
-	console.log(this._action)
 	for(var i = 0, len = this.columns.length; i < len; ++i) {
 		var column = this.columns[i];
 		column.id = column.value.replace(/\s/g, '-').toLowerCase();
@@ -83,13 +89,16 @@ modal.prototype.setting = function(option) {
 		    case "custom":
 		    	el = column.el;
 		    	break;
+		    case "render":
+		    	column.html = column.render(column._data, column.name, this._data, column.id);
+		    	break;
+		    	
 		    	
 		}
-		column.html = '<div class="row inline-box">'+
-						'<label id="title-modal-input">'+column.name+'</label>'+el+
-				      '</div>';
+			column.html = column.html||'<div class="row inline-box">'+
+				'<label id="title-modal-input">'+column.name+'</label>'+el+
+			'</div>';
 	}
-	test = this.columns;
 	return this;
 }
 
@@ -207,12 +216,18 @@ modal.prototype.data = function() {
 			    	column._data = _._getText("#"+column.id);
 			        break;
 			    case "select":
-			    	column.option.selected = _._getSelect("#"+column.id);
-			    	acc[column.value] = column.option.selected;
-			    	return acc;
+			    	column._data = _._getSelect("#"+column.id);
+			    	break;
 			    case "custom":
 			    	acc = _._mergeData(acc, column._data);
 			    	return acc;
+			    case "render":
+			    	if(typeof column.getData == "function") {
+			    		column._data = column.getData("#"+column.id);
+			    	} else {
+			    		column._data = _._getText("#"+column.id);
+			    	}
+			    	break;
 			    
 			}
 		}
