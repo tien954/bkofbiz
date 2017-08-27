@@ -78,6 +78,6 @@
 		titleNew="Add"
 		titleDelete="Delete"
 		jqTitle="Staff Research Speciality"
-		contextmenu=true
+		contextmenu=true;
 	/>
 </div>

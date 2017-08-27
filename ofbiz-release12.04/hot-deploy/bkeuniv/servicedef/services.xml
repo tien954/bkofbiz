@@ -138,9 +138,8 @@
     	<attribute name="result" mode="OUT" type="String"></attribute>
     </service>
     
-<<<<<<< HEAD
     
-     <service name="getResearchDomain" engine="java" 
+      <service name="getResearchDomain" engine="java" 
     		location="src.org.ofbiz.bkeuniv.researchdomain.ResearchDomain" invoke="getResearchDomain">
     	<attribute name="researchDomainId" mode="IN" type="String" optional="true"></attribute>
     	<attribute name="researchDomainName" mode="IN" type="String" optional="true"></attribute>   	
@@ -164,7 +163,15 @@
     	<attribute name="message" mode="OUT" type="String"></attribute>
     </service>
     
-    <service name="getResearchSpeciality" engine="java" 
+     <service name="deleteResearchDomain" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.researchdomain.ResearchDomain" invoke="deleteResearchDomain">
+    	<attribute name="researchDomainId" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="result" mode="OUT" type="String"></attribute>
+	</service>
+	
+	
+	 <service name="getResearchSpeciality" engine="java" 
     		location="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality" invoke="getResearchSpeciality">
     	<attribute name="researchSpecialityId" mode="IN" type="String" optional="true"></attribute>
     	<attribute name="researchSpecialityName" mode="IN" type="String" optional="true"></attribute>   	
@@ -195,12 +202,36 @@
     	<attribute name="result" mode="OUT" type="String"></attribute>
     </service>
     
-    <service name="deleteResearchDomain" engine="java" 
-    		location="src.org.ofbiz.bkeuniv.researchdomain.ResearchDomain" invoke="deleteResearchDomain">
-    	<attribute name="researchDomainId" mode="IN" type="String"></attribute>
+    
+    <service name="getStaffResearchSpeciality" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.staffresearchspeciality.StaffResearchSpeciality" invoke="getStaffResearchSpeciality">
+    	<attribute name="staffResearchSpecialityId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="staffId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="researchSpecialityId" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="fromDate" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="thruDate" mode="IN" type="String" optional="true"></attribute>
+    	<attribute name="staffResearchSpeciality" mode="OUT" type="List"></attribute>
+    </service>
+    
+    <service name="updateStaffResearchSpeciality" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.staffresearchspeciality.StaffResearchSpeciality" invoke="updateStaffResearchSpeciality">
+    	<attribute name="staffResearchSpecialityId" mode="IN" type="String"></attribute>
+    	<attribute name="staffId" mode="IN" type="String"></attribute>
+    	<attribute name="researchSpecialityId" mode="IN" type="String"></attribute>
+    	<attribute name="fromDate" mode="IN" type="String"></attribute>
+    	<attribute name="thruDate" mode="IN" type="String"></attribute>
+    	
+    	<attribute name="staffResearchSpeciality" mode="OUT" type="Map"></attribute>
+    	<attribute name="message" mode="OUT" type="String"></attribute>
+    </service>
+    
+    <service name="deleteStaffResearchSpeciality" engine="java" 
+    		location="src.org.ofbiz.bkeuniv.staffresearchspeciality.StaffResearchSpeciality" invoke="deleteStaffResearchSpeciality">
+    	<attribute name="staffResearchSpecialityId" mode="IN" type="String"></attribute>
     	
     	<attribute name="result" mode="OUT" type="String"></attribute>
-	</service>
+    </service>
+   
     <service name="getPaperCategory" engine="java" 
     		location="src.org.ofbiz.bkeuniv.paperdeclaration.PaperDeclarationService" invoke="getPaperCategory">
     	<attribute name="paperCategoryId" mode="IN" type="String" optional="true"></attribute>

@@ -278,35 +278,35 @@
 	</request-map>
 	
 	
-	<request-map uri="research-speciality-management">
+	<request-map uri="staff-research-speciality">
     	<security https="true" auth="true"/>
-    	<response name="success" type="view" value="view-research-speciality-management"/>    
+    	<response name="success" type="view" value="view-staff-research-speciality"/>    
     </request-map>
     
-    <request-map uri="get-research-speciality-management">
+    <request-map uri="get-staff-research-speciality">
 		<security https="true" auth="true"/>
-		<event type="service" invoke="getResearchSpeciality"></event>
+		<event type="service" invoke="getStaffResearchSpeciality"></event>
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
     
-    <request-map uri="create-research-speciality-management">
+    <request-map uri="create-staff-research-speciality">
 		<security https="true" auth="true"/>		
-		<event type="java" invoke="createResearchSpecialityRequestResponse" path="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality"></event>		 
+		<event type="service" invoke="createStaffResearchSpeciality"></event>		 
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
 	
-	<request-map uri="update-research-speciality-management">
+	<request-map uri="update-staff-research-speciality">
 		<security https="true" auth="true"/>
-		<event type="service" invoke="updateResearchSpeciality"></event>
+		<event type="service" invoke="updateStaffResearchSpeciality"></event>
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
 	
-	<request-map uri="delete-research-speciality-management">
+	<request-map uri="delete-staff-research-speciality">
 		<security https="true" auth="true"/>
-		<event type="service" invoke="deleteResearchSpeciality"></event>
+		<event type="service" invoke="deleteStaffResearchSpeciality"></event>
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
@@ -333,5 +333,6 @@
     <view-map name="view-paper-declaration-staff" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#paperDeclaration"/>
     <view-map name="view-research-domain-management" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#researchDomain"/>
     <view-map name="view-research-speciality-management" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#researchSpeciality"/>
+    <view-map name="view-staff-research-speciality" type="screen" page="component://bkeuniv/widget/BkEunivScreens.xml#staffResearchSpeciality"/>
     
 </site-conf>

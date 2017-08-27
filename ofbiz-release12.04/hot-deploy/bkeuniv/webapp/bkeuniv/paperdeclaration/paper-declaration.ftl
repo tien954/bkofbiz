@@ -70,11 +70,7 @@
 </style>
 <script>
 	function createUploadFile(data, name, dataRow, id) {
-		var script = 'let filedrag = this.filedrag;
-		filedrag.addEventListener('dragleave', (e) => { this.fileDragLeave(e) }, false);
-		filedrag.addEventListener('drop', (e) => { this.fileSelectHandler(e) }, false);
-		filedrag.addEventListener('dragenter', (e) => { this.fileOndragenter(e) }, false);
-		filedrag.addEventListener('dragover', (e) => { this.fileDragHover(e) }, false);
+		
 	
 		return '<div class="upload" id="'+id+'">'+
 					'<div class="upload-file" >'+
@@ -87,57 +83,7 @@
 				'</div>';
 	};
 
-	function componentDidMount() {
-		
-
-	}
-
-	fileOndragenter(e) {
-		let filedrag = this.filedrag;
-		let childrens = Array.from(filedrag.children);
-		for (let children of childrens) {
-			children.style.zIndex = -2; 
-		}
-		e.target.classList.add('drag-over');
-	}
-
-	fileDragHover(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}
-
-	fileDragLeave(e) {
-		e.target.classList.remove('drag-over');
-		let filedrag = this.filedrag;
-		let childrens = Array.from(filedrag.children);
-		for (let children of childrens) {
-			children.style.zIndex = ''; 
-		}
-		e.stopPropagation();
-		e.preventDefault();
-	}
-
-	fileSelectHandler(e) {
-		let file = e.target.files || e.dataTransfer.files;
-        
-		e.preventDefault();
-		let reader = new FileReader();
-
-		reader.readAsText(file[0], 'utf-8');
-		reader.onload = (event) => {
-			let data = event.target.result
-			let fileName = file[0].name
-			let lastModified = file[0].lastModified;
-			this.props.dispatch(name(assignFunc({
-				data, fileName, lastModified
-			}), 'ON_DROP_JSON_FILE'))
-		}
-
-		reader.onerror = (event) => {
-			this.props.onError(event);
-		}
-	}
-
+	
 </script>
 
 <div class="body">
