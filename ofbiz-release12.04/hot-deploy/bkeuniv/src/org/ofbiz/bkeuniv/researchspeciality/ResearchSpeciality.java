@@ -29,54 +29,54 @@ import javolution.util.FastMap;
 import src.org.ofbiz.utils.BKEunivUtils;
 
 public class ResearchSpeciality {
-	public final static String module = ResearchSpeciality.class.getName();
-	
-	public static String createResearchSpecialityRequestResponse(HttpServletRequest request, HttpServletResponse response){
-		LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-		Delegator delegator = (Delegator) request.getAttribute("delegator");
-		Locale locale = UtilHttp.getLocale(request);
-		GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-		GenericValue staff = (GenericValue)request.getSession().getAttribute("staff");
-		Map<String, Object> context = FastMap.newInstance();
-		context.put("researchSpecialityId",request.getParameter("researchSpecialityId"));
-		context.put("researchSpecialityName",request.getParameter("researchSpecialityName"));
-		try{
-			Map<String, Object> resultNewResearchSpeciality = dispatcher.runSync("createResearchSpeciality", context);
-			BKEunivUtils.writeJSONtoResponse(BKEunivUtils.parseJSONObject(resultNewResearchSpeciality), response, 200);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return "success";
-	}
-	
-	public static Map<String, Object> getResearchSpeciality(DispatchContext ctx, 
-			Map<String, ? extends Object> context) {
+	public static Map<String, Object> getResearchSpeciality(DispatchContext ctx, Map<String, ? extends Object> context) {
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher localDispatcher = ctx.getDispatcher();
 		
-		String researchSpecialityId = (String)context.get("researchSpecialityId");		
-		String researchSpecialityName = (String)context.get("researchSpecialityName");		
+		String u1 = (String)ctx.getAttribute("userLoginId");
+		String u2 = (String)context.get("userLoginId");
 		
+		if(u1 == null) u1 = "NULL";
+		if(u2 == null) u2 = "NULL";
+		
+		String[] keys = {"researchSpecialityId", "researchSpecialityName", "researchDomainId"};
+		String[] search = {"researchSpecialityId"};
 		try {
-			 Map<String, Object> result = ServiceUtil.returnSuccess();
-			 EntityCondition entity;
-			 
-			 EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-			 List<GenericValue> list;
-			 if(researchSpecialityId == null) {
-					list = delegator.findList("ResearchSpeciality", null, null, null, findOptions, true);					
-			 }
-			  else {				
-				  entity = EntityCondition.makeCondition("researchSpecialityId", EntityOperator.EQUALS, researchSpecialityId);				
-				  list = delegator.findList("ResearchSpeciality", entity, null, null, findOptions, true);	
+			List<EntityCondition> conditions = new ArrayList<EntityCondition>();
+			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+			for(String key: keys) {
+				Object el = context.get(key);
+				if(!(el == null||el==(""))) {
+					EntityCondition condition;
+					int index = Arrays.asList(search).indexOf(key);
+					if( index == -1) {
+						condition = EntityCondition.makeCondition(key, EntityOperator.EQUALS, el);
+					} else {
+						condition = EntityCondition.makeCondition(key, EntityOperator.LIKE, el);
+					}
+					conditions.add(condition);
+				}
 			}
-			 result.put("researchSpeciality", list);
-			 return result;						 
-	
+			List<GenericValue> list = delegator.findList("ResearchSpeciality", EntityCondition.makeCondition(conditions), null, null, findOptions, false);
+			Map<String, Object> result = ServiceUtil.returnSuccess();
+			
+			List<Map> listResearchSpeciality = FastList.newInstance();
+			for(GenericValue el: list) {
+				Map<String, Object> mapResearchSpeciality = FastMap.newInstance();
+				mapResearchSpeciality.put("researchSpecialityId", el.getString("researchSpecialityId"));
+				mapResearchSpeciality.put("researchSpecialityName", el.getString("researchSpecialityName"));
+				mapResearchSpeciality.put("researchDomainId", el.getString("researchDomainId"));
+				listResearchSpeciality.add(mapResearchSpeciality);
+			}
+			//result.put("result", listResearchSpeciality);
+			result.put("researchSpeciality", listResearchSpeciality);
+			return result;
+		
 		} catch (Exception e) {
+			System.out.print("Research Speciality Error");
 			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
-  			return rs; 			
-  		}				
+			return rs;
+		}
 	}
 	
 	public static Map<String, Object> createResearchSpeciality(DispatchContext ctx,
@@ -92,12 +92,14 @@ public class ResearchSpeciality {
 
 		String researchSpecialityId = (String) context.get("researchSpecialityId");
 		String researchSpecialityName = (String) context.get("researchSpecialityName");
+		List researchDomainId = (List) context.get("researchDomainId[]");
 		
 		GenericValue gv = delegator.makeValue("ResearchSpeciality");
 
 		try {
 			gv.put("researchSpecialityId", researchSpecialityId);
 			gv.put("researchSpecialityName", researchSpecialityName);
+			gv.put("researchDomainId", researchDomainId.get(0));
 			
 			delegator.create(gv);
 		} catch (Exception ex) {
@@ -146,19 +148,22 @@ public class ResearchSpeciality {
 		
 		String researchSpecialityId = (String) context.get("researchSpecialityId");
 		String researchSpecialityName = (String) context.get("researchSpecialityName");
+		List researchDomainId = (List) context.get("researchDomainId[]");
 		
 		try{
 			GenericValue gv = delegator.findOne("ResearchSpeciality", false, UtilMisc.toMap("researchSpecialityId",researchSpecialityId));
 			if(gv != null){
 				
-				
+				gv.put("researchSpecialityId", researchSpecialityId);
 				gv.put("researchSpecialityName", researchSpecialityName);
+				gv.put("researchDomainId", researchDomainId.get(0));
 				
 				delegator.store(gv);
 				
 				Map<String, Object> rs = new HashMap<String, Object>();
 				rs.put("researchSpecialityId", researchSpecialityId);
 				rs.put("researchSpecialityName", researchSpecialityName);
+				rs.put("researchDomainId", researchDomainId);
 				
 				retSucc.put("researchSpeciality", rs);
         		retSucc.put("message", "updated record with id: " + researchSpecialityId);

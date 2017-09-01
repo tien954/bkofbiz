@@ -14,8 +14,15 @@
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivThruDate?j_string,
 			"data": "thruDate"
+		},
+		{
+			"name": staffResearchSpecialityUiLabelMap.BkEunivStaffId?j_string,
+			"data": "staffId"
 		}
 	] />
+	
+	
+	
 	
 	<#assign fields=[
 		"staffResearchSpecialityId",
@@ -39,6 +46,11 @@
 			"name": staffResearchSpecialityUiLabelMap.BkEunivThruDate?j_string,
 			"value": "thruDate",
 			"type": "date"
+		},
+		{
+			"name": staffResearchSpecialityUiLabelMap.BkEunivStaffId?j_string,
+			"value": "staffId"
+			
 		}
 	] />
 	
@@ -56,6 +68,10 @@
 			"name": staffResearchSpecialityUiLabelMap.BkEunivThruDate?j_string,
 			"value": "thruDate",
 			"type": "date"
+		},
+		{
+			"name": staffResearchSpecialityUiLabelMap.BkEunivStaffId?j_string,
+			"value": "staffId"
 		}
 	] />
 	

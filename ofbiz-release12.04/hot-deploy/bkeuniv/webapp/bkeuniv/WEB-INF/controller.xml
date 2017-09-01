@@ -229,7 +229,7 @@
     
     <request-map uri="create-research-domain-management">
 		<security https="true" auth="true"/>		
-		<event type="java" invoke="createResearchDomainRequestResponse" path="src.org.ofbiz.bkeuniv.researchdomain.ResearchDomain"></event>		 
+		<event type="service" invoke="createResearchDomain"></event>		 
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>
@@ -249,7 +249,6 @@
 	</request-map>
 	
 	
-	
 	<request-map uri="research-speciality-management">
     	<security https="true" auth="true"/>
     	<response name="success" type="view" value="view-research-speciality-management"/>    
@@ -264,7 +263,7 @@
     
     <request-map uri="create-research-speciality-management">
 		<security https="true" auth="true"/>		
-		<event type="java" invoke="createResearchSpecialityRequestResponse" path="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality"></event>		 
+		<event type="service" invoke="createResearchSpeciality"></event>		 
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>

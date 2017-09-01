@@ -236,6 +236,7 @@
 			<actions>
 				<entity-condition list="listStaffs" entity-name="ResearchDomain"></entity-condition>
 				<property-map resource="BkEunivResearchDomainUiLabels" map-name="researchDomainUiLabelMap" global="true"/>
+				
 			</actions>
 			<widgets>
 				<decorator-screen name="bkeuniv-global-decorator"
@@ -261,6 +262,7 @@
 			<actions>
 				<entity-condition list="listStaffs" entity-name="ResearchSpeciality"></entity-condition>
 				<property-map resource="BkEunivResearchSpecialityUiLabels" map-name="researchSpecialityUiLabelMap" global="true"/>
+				<service service-name="getResearchDomain" result-map="researchDomain"></service>
 			</actions>
 			<widgets>
 				<decorator-screen name="bkeuniv-global-decorator"
@@ -286,6 +288,8 @@
 			<actions>
 				<entity-condition list="listStaffs" entity-name="ResearchSpeciality"></entity-condition>
 				<property-map resource="BkEunivStaffResearchSpecialityUiLabels" map-name="staffResearchSpecialityUiLabelMap" global="true"/>
+				
+				<service service-name="getStaffs" result-map="resultStaffResearchSpeciality"></service>
 			</actions>
 			<widgets>
 				<decorator-screen name="bkeuniv-global-decorator"

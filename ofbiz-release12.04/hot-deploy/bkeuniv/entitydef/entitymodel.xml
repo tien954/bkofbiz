@@ -25,6 +25,19 @@
 			<key-map field-name="researchDomainId"/>
 		</relation>
 	</entity>
+	
+	<view-entity entity-name="ResearchSpecialityView" package-name="org.ofbiz.bkeuniv">
+		<member-entity entity-alias="RS" entity-name="StaffResearchSpeciality"></member-entity>
+		<member-entity entity-alias="RD" entity-name="ResearchDomain"></member-entity>
+		
+		<alias-all entity-alias="RS"></alias-all>
+		<alias name="researchDomainName" entity-alias="RD"></alias>
+		
+		<view-link rel-entity-alias="RD" entity-alias="RS" rel-optional="true">
+			<key-map field-name="researchDomainId" rel-field-name="researchDomainId"/>
+		</view-link>
+		
+	</view-entity>
 
 	<entity entity-name="StaffResearchSpeciality" package-name="org.ofbiz.bkeuniv">
 		<field name="staffResearchSpecialityId" type="id-ne"></field>
@@ -37,6 +50,22 @@
 			<key-map field-name="staffId"/>
 		</relation>
 	</entity>
+	
+	
+	<view-entity entity-name="StaffResearchSpecialityView" package-name="org.ofbiz.bkeuniv">
+		<member-entity entity-alias="SRS" entity-name="StaffResearchSpeciality"></member-entity>
+		<member-entity entity-alias="ST" entity-name="Staff"></member-entity>
+		
+		<alias-all entity-alias="SRS"></alias-all>
+		<alias name="staffName" entity-alias="ST"></alias>
+		
+		<view-link rel-entity-alias="ST" entity-alias="SRS" rel-optional="true">
+			<key-map field-name="staffId" rel-field-name="staffId"/>
+		</view-link>
+		
+	</view-entity>
+	
+	
 	<!-- end lĩnh vực nghiên cứu -->
 
 	<!-- Chức danh nghiên cứu -->
