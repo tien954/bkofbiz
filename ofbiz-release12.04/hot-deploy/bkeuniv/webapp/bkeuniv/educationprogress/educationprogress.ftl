@@ -45,7 +45,8 @@
 		},
 		{
 			"name": educationProgressUiLabelMap.BkEunivGraduateDate?j_string,
-			"value": "graduateDate"
+			"value": "graduateDate",
+			"type": "date"
 		} 
 	] />
 	
@@ -64,13 +65,15 @@
 		},
 		{
 			"name": educationProgressUiLabelMap.BkEunivGraduateDate?j_string,
-			"value": "graduateDate"
+			"value": "graduateDate",
+			"type": "date"
 		} 
 	] />
 	
 	<#assign sizeTable="$(window).innerHeight() - $(\".nav\").innerHeight() - $(\".footer\").innerHeight()" />
 	
 	<@jqDataTable
+		id="DataTable-EducationProgress"
 		urlData="/bkeuniv/control/get-education-progress" 
 		columns=columns 
 		dataFields=fields 
@@ -86,5 +89,6 @@
 		titleNew="test"
 		titleDelete="test"
 		jqTitle="test"
+		contextmenu=true
 	/>
 </div>
