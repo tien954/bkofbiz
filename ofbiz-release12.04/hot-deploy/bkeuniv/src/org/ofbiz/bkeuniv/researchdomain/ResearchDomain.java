@@ -31,55 +31,91 @@ import src.org.ofbiz.utils.BKEunivUtils;
 public class ResearchDomain {
 	public final static String module = ResearchDomain.class.getName();
 	
-	public static String createResearchDomainRequestResponse(HttpServletRequest request, HttpServletResponse response){
-		LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-		Delegator delegator = (Delegator) request.getAttribute("delegator");
-		Locale locale = UtilHttp.getLocale(request);
-		GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-		GenericValue staff = (GenericValue)request.getSession().getAttribute("staff");
-		Map<String, Object> context = FastMap.newInstance();
-		context.put("researchDomainId",request.getParameter("researchDomainId"));
-		context.put("researchDomainName",request.getParameter("researchDomainName"));
-		try{
-			Map<String, Object> resultNewResearchDomain = dispatcher.runSync("createResearchDomain", context);
-			BKEunivUtils.writeJSONtoResponse(BKEunivUtils.parseJSONObject(resultNewResearchDomain), response, 200);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return "success";
-	}
+//	public static Map<String, Object> getResearchDomain1(DispatchContext ctx, Map<String, ? extends Object> context) {
+//		Delegator delegator = ctx.getDelegator();
+//		LocalDispatcher localDispatcher = ctx.getDispatcher();
+//		String researchDomainId = (String)context.get("researchDomainId");		
+//		String researchDomainName = (String)context.get("researchDomainName");
+//		try {
+//			Map<String, Object> result = ServiceUtil.returnSuccess();
+//			EntityCondition entity;
+//			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+//			List<GenericValue> list;
+//			if(researchDomainId==null) {
+//				System.out.println("empty");
+//				list = delegator.findList("ResearchDomain", null, null, null, findOptions, true);
+//			} else {
+//				entity = EntityCondition.makeCondition("researchDomainId", EntityOperator.EQUALS, researchDomainId);
+//				list = delegator.findList("ResearchDomain", entity, null, null, findOptions, true);				
+//			}
+//			System.out.println("list "+list);
+//			 result.put("researchDomain", list);
+//			 return result;	
+//		} catch (Exception e) {
+//			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
+//			return rs;
+//		}
+//	}
 	
-	public static Map<String, Object> getResearchDomain(DispatchContext ctx, 
-			Map<String, ? extends Object> context) {
+	public static Map<String, Object> getResearchDomain(DispatchContext ctx, Map<String, ? extends Object> context) {
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher localDispatcher = ctx.getDispatcher();
 		
-		String researchDomainId = (String)context.get("researchDomainId");		
-		String researchDomainName = (String)context.get("researchDomainName");		
+		String u1 = (String)ctx.getAttribute("userLoginId");
+		String u2 = (String)context.get("userLoginId");
 		
+		if(u1 == null) u1 = "NULL";
+		if(u2 == null) u2 = "NULL";
+		
+		//System.out.println(module + "::getEducationProgress, System.out.println u1 = " + u1 + ", u2 = " + u2);
+		//Debug.log(module + "::getEducationProgress, Debug.log u1 = " + u1 + ", u2 = " + u2);
+		
+		
+		String[] keys = {"researchDomainId", "researchDomainName"};
+		String[] search = {"researchDomainName"};
 		try {
-			 Map<String, Object> result = ServiceUtil.returnSuccess();
-			 EntityCondition entity;
-			 
-			 EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-			 List<GenericValue> list;
-			 if(researchDomainId == null) {
-					list = delegator.findList("ResearchDomain", null, null, null, findOptions, true);					
-			 }
-			  else {				
-				  entity = EntityCondition.makeCondition("researchDomainId", EntityOperator.EQUALS, researchDomainId);				
-				  list = delegator.findList("ResearchDomain", entity, null, null, findOptions, true);	
+			List<EntityCondition> conditions = new ArrayList<EntityCondition>();
+			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+			for(String key: keys) {
+				Object el = context.get(key);
+				if(!(el == null||el==(""))) {
+					EntityCondition condition;
+					int index = Arrays.asList(search).indexOf(key);
+					if( index == -1) {
+						condition = EntityCondition.makeCondition(key, EntityOperator.EQUALS, el);
+					} else {
+						condition = EntityCondition.makeCondition(key, EntityOperator.LIKE, el);
+					}
+					conditions.add(condition);
+				}
 			}
-			 result.put("researchDomain", list);
-			 return result;						 
-	
+			
+			List<GenericValue> list = delegator.findList("ResearchDomain", EntityCondition.makeCondition(conditions), null, null, findOptions, false);
+			Map<String, Object> result = ServiceUtil.returnSuccess();
+			
+			List<Map> listMap = FastList.newInstance();
+			for(GenericValue el: list) {
+				Map<String, Object> map = FastMap.newInstance();
+				for(String key: keys) {
+					map.put(key, el.getString(key));
+					
+				}
+				listMap.add(map);
+			}
+			result.put("researchDomain", listMap);
+			result.put("result", listMap);
+			result.put("count", String.valueOf(listMap.size()));
+			return result;
+		
 		} catch (Exception e) {
+			System.out.print("Research Domain Error");
 			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
-  			return rs; 			
-  		}				
+			return rs;
+		}
 	}
 	
-	public static Map<String, Object> createResearchDomain(DispatchContext ctx,
+	
+	public static Map<String, Object> createResearchDomain1(DispatchContext ctx,
 			Map<String, ? extends Object> context) {
 
 		Delegator delegator = ctx.getDelegator();
@@ -108,6 +144,40 @@ public class ResearchDomain {
 		retSucc.put("researchDomain", gv);
 		retSucc.put("message", "Create new row");
 		return retSucc;
+	}
+	
+	public static Map<String, Object> createResearchDomain(DispatchContext ctx, Map<String, ? extends Object> context) {
+		System.out.println("createResearchDomain");
+		Delegator delegator = ctx.getDelegator();
+		LocalDispatcher localDispatcher = ctx.getDispatcher();
+		String researchDomainId = (String) context.get("researchDomainId");
+		String researchDomainName = (String) context.get("researchDomainName");
+		System.out.println("ResearchDomain"+" "+researchDomainId+" "+researchDomainName);
+		try {
+			Map<String, Object> result = ServiceUtil.returnSuccess();
+			GenericValue gv=delegator.makeValue("ResearchDomain");
+			//gv.put("researchDomainId", delegator.getNextSeqId("ResearchDomain"));
+			gv.put("researchDomainId", researchDomainId);
+			gv.put("researchDomainName", researchDomainName);
+			
+			System.out.println(gv);
+			delegator.create(gv);
+			Map<String,Object> map=new HashMap<String, Object>();
+			map.put("researchDomainId", gv.get("researchDomainId"));
+			map.put("researchDomainName",  gv.get("researchDomainName"));
+//			map.put("description", gv.get("description"));
+//			map.put("quantity", gv.get("quantity"));
+			
+			result.put("researchDomain", gv);
+			result.put("message", "Create new row");
+			return result;
+//			result.put("object", map);
+//			return result;
+		} catch (Exception e) {
+			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
+			return rs;
+		}
+		
 	}
 	
 	public static Map<String, Object> deleteResearchDomain(DispatchContext ctx, 
