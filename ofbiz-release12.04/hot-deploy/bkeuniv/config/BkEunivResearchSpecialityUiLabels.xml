@@ -10,6 +10,11 @@
         <value xml:lang="vi">Tên chuyên ngành nghiên cứu</value>
     </property>
     
+    <property key="BkEunivResearchDomainId">
+        <value xml:lang="en">researchDomainId</value>
+        <value xml:lang="vi">Mã lĩnh vực nghiên cứu</value>
+    </property>
+    
     
      <property key="BkEunivEditResearchSpeciality">
         <value xml:lang="en">Edit Research Speciality</value>

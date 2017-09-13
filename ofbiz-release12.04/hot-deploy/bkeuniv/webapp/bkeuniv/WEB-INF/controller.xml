@@ -250,7 +250,6 @@
 	</request-map>
 	
 	
-	
 	<request-map uri="research-speciality-management">
     	<security https="true" auth="true"/>
     	<response name="success" type="view" value="view-research-speciality-management"/>    
@@ -265,41 +264,7 @@
     
     <request-map uri="create-research-speciality-management">
 		<security https="true" auth="true"/>		
-		<event type="java" invoke="createResearchSpecialityRequestResponse" path="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality"></event>		 
-		<response name="success" type="request" value="json"></response>
-		<response name="error" type="request" value="json"></response>
-	</request-map>
-	
-	<request-map uri="update-research-speciality-management">
-		<security https="true" auth="true"/>
-		<event type="service" invoke="updateResearchSpeciality"></event>
-		<response name="success" type="request" value="json"></response>
-		<response name="error" type="request" value="json"></response>
-	</request-map>
-	
-	<request-map uri="delete-research-speciality-management">
-		<security https="true" auth="true"/>
-		<event type="service" invoke="deleteResearchSpeciality"></event>
-		<response name="success" type="request" value="json"></response>
-		<response name="error" type="request" value="json"></response>
-	</request-map>
-	
-	
-	<request-map uri="research-speciality-management">
-    	<security https="true" auth="true"/>
-    	<response name="success" type="view" value="view-research-speciality-management"/>    
-    </request-map>
-    
-    <request-map uri="get-research-speciality-management">
-		<security https="true" auth="true"/>
-		<event type="service" invoke="getResearchSpeciality"></event>
-		<response name="success" type="request" value="json"></response>
-		<response name="error" type="request" value="json"></response>
-	</request-map>
-    
-    <request-map uri="create-research-speciality-management">
-		<security https="true" auth="true"/>		
-		<event type="java" invoke="createResearchSpecialityRequestResponse" path="src.org.ofbiz.bkeuniv.researchspeciality.ResearchSpeciality"></event>		 
+		<event type="service" invoke="createResearchSpeciality"></event>		 
 		<response name="success" type="request" value="json"></response>
 		<response name="error" type="request" value="json"></response>
 	</request-map>

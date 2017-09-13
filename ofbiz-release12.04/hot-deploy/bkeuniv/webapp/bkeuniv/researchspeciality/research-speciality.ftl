@@ -10,12 +10,25 @@
 		{
 			"name": researchSpecialityUiLabelMap.BkEunivResearchSpecialityName?j_string,
 			"data": "researchSpecialityName"
+		},
+		{
+			"name": researchSpecialityUiLabelMap.BkEunivResearchDomainId?j_string,
+			"data": "researchDomainId"
 		}
 	] />
 	
+	<#assign source = [] />
+	<#list researchDomainManagement.result as rs>
+		<#if rs?has_content>
+             <#assign op = { "name": rs.researchDomainName?j_string ,"value": rs.researchDomainId?j_string } />
+						<#assign source = source + [op] />
+		</#if>
+	</#list>
+	
 	<#assign fields=[
 		"researchSpecialityId",
-		"researchSpecialityName"		
+		"researchSpecialityName",
+		"researchDomainId"		
 	] />
 	
 	<#assign columnsChange=[
@@ -26,6 +39,15 @@
 		{
 			"name": researchSpecialityUiLabelMap.BkEunivResearchSpecialityName?j_string,
 			"value": "researchSpecialityName"
+		},
+		{
+			"name": researchSpecialityUiLabelMap.BkEunivResearchDomainId?j_string,
+			"value": "researchDomainId",
+			"type": "select",
+			"option": {
+				"source": source,
+				"maxItem": 1
+			}
 		}
 	] />
 	
@@ -37,6 +59,15 @@
 		{
 			"name": researchSpecialityUiLabelMap.BkEunivResearchSpecialityName?j_string,
 			"value": "researchSpecialityName"
+		},
+		{
+			"name": researchSpecialityUiLabelMap.BkEunivResearchDomainId?j_string,
+			"value": "researchDomainId",
+			"type": "select",
+			"option": {
+				"source": source,
+				"maxItem": 1
+			}
 		}
 	] />
 	

@@ -31,52 +31,58 @@ import src.org.ofbiz.utils.BKEunivUtils;
 public class ResearchSpeciality {
 	public final static String module = ResearchSpeciality.class.getName();
 	
-	public static String createResearchSpecialityRequestResponse(HttpServletRequest request, HttpServletResponse response){
-		LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-		Delegator delegator = (Delegator) request.getAttribute("delegator");
-		Locale locale = UtilHttp.getLocale(request);
-		GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-		GenericValue staff = (GenericValue)request.getSession().getAttribute("staff");
-		Map<String, Object> context = FastMap.newInstance();
-		context.put("researchSpecialityId",request.getParameter("researchSpecialityId"));
-		context.put("researchSpecialityName",request.getParameter("researchSpecialityName"));
-		try{
-			Map<String, Object> resultNewResearchSpeciality = dispatcher.runSync("createResearchSpeciality", context);
-			BKEunivUtils.writeJSONtoResponse(BKEunivUtils.parseJSONObject(resultNewResearchSpeciality), response, 200);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return "success";
-	}
-	
-	public static Map<String, Object> getResearchSpeciality(DispatchContext ctx, 
-			Map<String, ? extends Object> context) {
+	public static Map<String, Object> getResearchSpeciality(DispatchContext ctx, Map<String, ? extends Object> context) {
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher localDispatcher = ctx.getDispatcher();
 		
-		String researchSpecialityId = (String)context.get("researchSpecialityId");		
-		String researchSpecialityName = (String)context.get("researchSpecialityName");		
+		String u1 = (String)ctx.getAttribute("userLoginId");
+		String u2 = (String)context.get("userLoginId");
 		
+		if(u1 == null) u1 = "NULL";
+		if(u2 == null) u2 = "NULL";
+		
+		String[] keys = {"researchSpecialityId", "researchSpecialityName", "researchDomainId"};
+		String[] search = {"researchSpecialityName"};
 		try {
-			 Map<String, Object> result = ServiceUtil.returnSuccess();
-			 EntityCondition entity;
-			 
-			 EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
-			 List<GenericValue> list;
-			 if(researchSpecialityId == null) {
-					list = delegator.findList("ResearchSpeciality", null, null, null, findOptions, true);					
-			 }
-			  else {				
-				  entity = EntityCondition.makeCondition("researchSpecialityId", EntityOperator.EQUALS, researchSpecialityId);				
-				  list = delegator.findList("ResearchSpeciality", entity, null, null, findOptions, true);	
+			List<EntityCondition> conditions = new ArrayList<EntityCondition>();
+			EntityFindOptions findOptions = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+			for(String key: keys) {
+				Object el = context.get(key);
+				if(!(el == null||el==(""))) {
+					EntityCondition condition;
+					int index = Arrays.asList(search).indexOf(key);
+					if( index == -1) {
+						condition = EntityCondition.makeCondition(key, EntityOperator.EQUALS, el);
+					} else {
+						condition = EntityCondition.makeCondition(key, EntityOperator.LIKE, el);
+					}
+					conditions.add(condition);
+				}
 			}
-			 result.put("researchSpeciality", list);
-			 return result;						 
-	
+			
+			List<GenericValue> list = delegator.findList("ResearchSpeciality", EntityCondition.makeCondition(conditions), null, null, findOptions, false);
+			Map<String, Object> result = ServiceUtil.returnSuccess();
+			
+			List<Map> listMap = FastList.newInstance();
+			for(GenericValue el: list) {
+				Map<String, Object> map = FastMap.newInstance();
+				for(String key: keys) {
+					System.out.println("researchSpeciality: " + key);
+					map.put(key, el.getString(key));
+					
+				}
+				listMap.add(map);
+			}
+			result.put("researchSpeciality", listMap);
+			result.put("result", listMap);
+			result.put("count", String.valueOf(listMap.size()));
+			return result;
+		
 		} catch (Exception e) {
+			System.out.print("Research Speciality Error");
 			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
-  			return rs; 			
-  		}				
+			return rs;
+		}
 	}
 	
 	public static Map<String, Object> createResearchSpeciality(DispatchContext ctx,
@@ -89,25 +95,36 @@ public class ResearchSpeciality {
 		Locale locale = (Locale) context.get("locale");
 
 		Map<String, Object> retSucc = ServiceUtil.returnSuccess();
-
+		
 		String researchSpecialityId = (String) context.get("researchSpecialityId");
 		String researchSpecialityName = (String) context.get("researchSpecialityName");
+		List<String> researchDomainId = (List<String>) context.get("researchDomainId[]");
 		
 		GenericValue gv = delegator.makeValue("ResearchSpeciality");
 
 		try {
 			gv.put("researchSpecialityId", researchSpecialityId);
 			gv.put("researchSpecialityName", researchSpecialityName);
-			
+			gv.put("researchDomainId", researchDomainId.get(0));
+									
 			delegator.create(gv);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			return ServiceUtil.returnError(ex.getMessage());
+			System.out.println("8");
+			Map<String, Object> rs = new HashMap<String, Object>();
+			rs.put("researchSpecialityId", researchSpecialityId);
+			rs.put("researchSpecialityName", researchSpecialityName);
+			
+			rs.put("researchDomainId", researchDomainId.get(0));
+			System.out.println(researchDomainId.get(0));			
+						
+			retSucc.put("researchSpeciality", rs);
+			System.out.println("16");
+			retSucc.put("message", "Create new row");
+			return retSucc;
+		} catch (Exception e) {
+			System.out.print("Research Speciality Error");
+			Map<String, Object> rs = ServiceUtil.returnError(e.getMessage());
+			return rs;
 		}
-		
-		retSucc.put("researchSpeciality", gv);
-		retSucc.put("message", "Create new row");
-		return retSucc;
 	}
 	
 	public static Map<String, Object> deleteResearchSpeciality(DispatchContext ctx, 
@@ -141,24 +158,36 @@ public class ResearchSpeciality {
 			Map<String, ? extends Object> context) {
 		Map<String,Object> retSucc = ServiceUtil.returnSuccess();
 		
+		System.out.println("1");
 		Delegator delegator = ctx.getDelegator();
+		System.out.println("2");
 		LocalDispatcher dispatch = ctx.getDispatcher();
+		System.out.println("3");
 		
 		String researchSpecialityId = (String) context.get("researchSpecialityId");
+		System.out.println("4");
 		String researchSpecialityName = (String) context.get("researchSpecialityName");
+		System.out.println("5");
+		List<String> researchDomainId = (List<String>) context.get("researchDomainId[]");
+		System.out.println(researchDomainId);
 		
 		try{
 			GenericValue gv = delegator.findOne("ResearchSpeciality", false, UtilMisc.toMap("researchSpecialityId",researchSpecialityId));
 			if(gv != null){
-				
-				
+				System.out.println("7");
+				gv.put("researchSpecialityId", researchSpecialityId);
 				gv.put("researchSpecialityName", researchSpecialityName);
+				gv.put("researchDomainId",researchDomainId.get(0));
+				System.out.println(researchDomainId);
 				
 				delegator.store(gv);
-				
+				System.out.println("8");
 				Map<String, Object> rs = new HashMap<String, Object>();
+				System.out.println("9");
 				rs.put("researchSpecialityId", researchSpecialityId);
 				rs.put("researchSpecialityName", researchSpecialityName);
+				rs.put("researchDomainId", researchDomainId.get(0));
+				System.out.println("10");
 				
 				retSucc.put("researchSpeciality", rs);
         		retSucc.put("message", "updated record with id: " + researchSpecialityId);
