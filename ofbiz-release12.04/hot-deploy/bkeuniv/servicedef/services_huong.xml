@@ -95,9 +95,11 @@
     
     <service name="createStaffResearchSpeciality" engine="java" 
     		location="src.org.ofbiz.bkeuniv.staffresearchspeciality.StaffResearchSpeciality" invoke="createStaffResearchSpeciality">
-    	<attribute name="researchSpecialityId" mode="IN" type="String"></attribute>
+    	<attribute name="researchSpecialityId[]" mode="IN" type="List"></attribute>
     	<attribute name="fromDate" mode="IN" type="String"></attribute>
     	<attribute name="thruDate" mode="IN" type="String"></attribute>
+    	<attribute name="staffId[]" mode="IN" type="List"></attribute>
+    	
     	<attribute name="staffResearchSpeciality" mode="OUT" type="Map"></attribute>
     	<attribute name="message" mode="OUT" type="String"></attribute>
     </service>
@@ -105,8 +107,8 @@
     <service name="updateStaffResearchSpeciality" engine="java" 
     		location="src.org.ofbiz.bkeuniv.staffresearchspeciality.StaffResearchSpeciality" invoke="updateStaffResearchSpeciality">
     	<attribute name="staffResearchSpecialityId" mode="IN" type="String"></attribute>
-    	<attribute name="staffId" mode="IN" type="String"></attribute>
-    	<attribute name="researchSpecialityId" mode="IN" type="String"></attribute>
+    	<attribute name="staffId[]" mode="IN" type="List"></attribute>
+    	<attribute name="researchSpecialityId[]" mode="IN" type="List"></attribute>
     	<attribute name="fromDate" mode="IN" type="String"></attribute>
     	<attribute name="thruDate" mode="IN" type="String"></attribute>
     	
@@ -120,6 +122,9 @@
     	
     	<attribute name="result" mode="OUT" type="String"></attribute>
     </service>
+    
+    
+    
     
     
 </services>

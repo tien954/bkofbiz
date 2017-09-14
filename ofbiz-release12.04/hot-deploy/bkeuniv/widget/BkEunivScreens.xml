@@ -289,7 +289,8 @@
 				<entity-condition list="listStaffs" entity-name="ResearchSpeciality"></entity-condition>
 				<property-map resource="BkEunivStaffResearchSpecialityUiLabels" map-name="staffResearchSpecialityUiLabelMap" global="true"/>
 				
-				<service service-name="getStaffs" result-map="resultStaffResearchSpeciality"></service>
+				<service service-name="getStaffs" result-map="staffResearchSpeciality"></service>
+				<service service-name="getResearchSpeciality" result-map="researchSpeciality"></service>
 			</actions>
 			<widgets>
 				<decorator-screen name="bkeuniv-global-decorator"

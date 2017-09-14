@@ -49,23 +49,26 @@
 		<relation rel-entity-name="Staff" type="one">
 			<key-map field-name="staffId"/>
 		</relation>
+		<relation rel-entity-name="ResearchSpeciality" type="one">
+			<key-map field-name="researchSpecialityId"/>
+		</relation>
 	</entity>
-	
-	
+		
 	<view-entity entity-name="StaffResearchSpecialityView" package-name="org.ofbiz.bkeuniv">
 		<member-entity entity-alias="SRS" entity-name="StaffResearchSpeciality"></member-entity>
 		<member-entity entity-alias="ST" entity-name="Staff"></member-entity>
-		
+		<member-entity entity-alias="RS" entity-name="ResearchSpeciality"></member-entity>
 		<alias-all entity-alias="SRS"></alias-all>
 		<alias name="staffName" entity-alias="ST"></alias>
-		
+		<alias name="researchSpecialityName" entity-alias="RS"></alias>
 		<view-link rel-entity-alias="ST" entity-alias="SRS" rel-optional="true">
 			<key-map field-name="staffId" rel-field-name="staffId"/>
 		</view-link>
-		
+		<view-link rel-entity-alias="RS" entity-alias="SRS" rel-optional="true">
+			<key-map field-name="researchSpecialityId" rel-field-name="researchSpecialityId"/>
+		</view-link>
 	</view-entity>
-	
-	
+		
 	<!-- end lĩnh vực nghiên cứu -->
 
 	<!-- Chức danh nghiên cứu -->

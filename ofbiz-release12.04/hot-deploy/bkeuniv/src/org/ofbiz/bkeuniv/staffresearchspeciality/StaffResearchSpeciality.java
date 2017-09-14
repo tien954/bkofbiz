@@ -19,7 +19,6 @@ import org.ofbiz.service.ServiceUtil;
 
 import java.sql.Date;
 
-
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
@@ -92,8 +91,9 @@ public class StaffResearchSpeciality{
 
 		Map<String, Object> retSucc = ServiceUtil.returnSuccess();
 		
-		String staffId = (String)userLogin.get("userLoginId");	
-		String researchSpecialityId = (String)context.get("researchSpecialityId");
+		//String staffId = (String)userLogin.get("userLoginId");
+		List staffId = (List)context.get("staffId[]");
+		List researchSpecialityId = (List)context.get("researchSpecialityId[]");
 		String fromDate = (String)context.get("fromDate");
 		String thruDate = (String)context.get("thruDate");
 		
@@ -110,8 +110,8 @@ public class StaffResearchSpeciality{
 		System.out.println(gv.get("staffResearchSpecialityId"));
 
 		try {
-			gv.put("staffId", staffId);
-			gv.put("researchSpecialityId", researchSpecialityId);
+			gv.put("staffId", staffId.get(0));
+			gv.put("researchSpecialityId", researchSpecialityId.get(0));
 			gv.put("fromDate", Date.valueOf(fromDate));
 			gv.put("thruDate", Date.valueOf(thruDate));
 			
@@ -123,26 +123,26 @@ public class StaffResearchSpeciality{
 			
 
 			delegator.create(gv);
+			System.out.println("1");
+			
+			Map<String, Object> mapStaffResearchSpeciality = FastMap.newInstance();
+			mapStaffResearchSpeciality.put("staffResearchSpecialityId", gv.getString("staffResearchSpecialityId"));
+			mapStaffResearchSpeciality.put("staffId[]", staffId.get(0));
+			mapStaffResearchSpeciality.put("researchSpecialityId[]", researchSpecialityId.get(0));
+			mapStaffResearchSpeciality.put("fromDate", fromDate);
+			mapStaffResearchSpeciality.put("thruDate", thruDate);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return ServiceUtil.returnError(ex.getMessage());
 		}
-		
-		Map<String, Object> mapStaffResearchSpeciality = FastMap.newInstance();
-		mapStaffResearchSpeciality.put("staffResearchSpecialityId", gv.getString("staffResearchSpecialityId"));
-		mapStaffResearchSpeciality.put("staffId", staffId);
-		mapStaffResearchSpeciality.put("researchSpecialityId", researchSpecialityId);
-		mapStaffResearchSpeciality.put("fromDate", fromDate);
-		mapStaffResearchSpeciality.put("thruDate", thruDate);
-		
-		
-		retSucc.put("staffResearchSpeciality", mapStaffResearchSpeciality);
+		retSucc.put("staffResearchSpeciality", gv);
+		System.out.println("2");
 		retSucc.put("message", "Create new row");
+		System.out.println("3");
 		return retSucc;
 	}
 	
 
-	
 	public static Map<String, Object> deleteStaffResearchSpeciality(DispatchContext ctx, Map<String, ? extends Object> context) {
         Delegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -172,35 +172,59 @@ public class StaffResearchSpeciality{
 	public static Map<String, Object> updateStaffResearchSpeciality(DispatchContext ctx, 
 			Map<String, ? extends Object> context) {
 		Map<String,Object> retSucc = ServiceUtil.returnSuccess();
-		
+		System.out.println("11");
 		Delegator delegator = ctx.getDelegator();
 		LocalDispatcher dispatch = ctx.getDispatcher();
+		System.out.println("12");
 		
-		String staffResearchSpecialityId = (String)context.get("staffResearchSpecialityId");		
-		String staffId = (String)context.get("staffId");		
-		String researchSpecialityId = (String)context.get("researchSpecialityId");
+		String staffResearchSpecialityId = (String)context.get("staffResearchSpecialityId");	
+		System.out.println("13");
+		List staffId = (List)context.get("staffId[]");	
+		System.out.println("14");
+		List researchSpecialityId = (List)context.get("researchSpecialityId[]");
+		System.out.println("15");
 		String fromDate = (String)context.get("fromDate");
+		System.out.println("16");
 		String thruDate = (String)context.get("thruDate");
+		System.out.println("17");
 		
+		
+		System.out.println(staffId);
+		System.out.println(researchSpecialityId);
+		System.out.println(fromDate);
+		System.out.println(thruDate);
 		try{
 			GenericValue gv = delegator.findOne("StaffResearchSpeciality", false, UtilMisc.toMap("staffResearchSpecialityId",staffResearchSpecialityId));
 			if(gv != null){
-				gv.put("staffId", staffId);
-				gv.put("researchSpecialityId", researchSpecialityId);
+				gv.put("staffId", staffId.get(0));
+				System.out.println("1");
+				gv.put("researchSpecialityId", researchSpecialityId.get(0));
+				System.out.println("2");
 				gv.put("fromDate", Date.valueOf(fromDate));
+				System.out.println("3");
 				gv.put("thruDate", Date.valueOf(thruDate));
+				System.out.println("4");
+				
+				
 				
 				
 				delegator.store(gv);	
+				System.out.println(staffId);
+				System.out.println(researchSpecialityId);
+				System.out.println(fromDate);
+				System.out.println(thruDate);
 				
 				Map<String, Object> rs = new HashMap<String, Object>();
 				rs.put("staffId", staffId);
 				rs.put("researchSpecialityId", researchSpecialityId);
 				rs.put("fromDate", fromDate);
 				rs.put("thruDate", thruDate);
-				rs.put("staffResearchSpecialityId", staffResearchSpecialityId);
 				
 				retSucc.put("staffResearchSpeciality", rs);
+				System.out.println("5");
+				System.out.println(researchSpecialityId);
+				System.out.println(fromDate);
+				System.out.println(thruDate);
         		retSucc.put("message", "updated record with id: " + staffResearchSpecialityId);
         	} else {
         		retSucc.put("message", "not found record with id: " + staffResearchSpecialityId);

@@ -21,8 +21,20 @@
 		}
 	] />
 	
-	
-	
+	<#assign sourceResearchSpeciality = [] />
+	<#list researchSpeciality.researchSpeciality as rs>
+		<#if rs?has_content>
+             <#assign op = { "name": rs.researchSpecialityName?j_string ,"value": rs.researchSpecialityId?j_string } />
+						<#assign sourceResearchSpeciality = sourceResearchSpeciality + [op] />
+		</#if>
+	</#list>
+		<#assign sourceStaff = [] />
+	<#list staffResearchSpeciality.staffs as srs>
+		<#if srs?has_content>
+             <#assign op = { "name": srs.staffName?j_string ,"value": srs.staffId?j_string } />
+						<#assign sourceStaff = sourceStaff + [op] />
+		</#if>
+	</#list>
 	
 	<#assign fields=[
 		"staffResearchSpecialityId",
@@ -35,7 +47,12 @@
 	<#assign columnsChange=[
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivResearchSpecialityId?j_string,
-			"value": "researchSpecialityId"
+			"value": "researchSpecialityId",
+			"type": "select",
+			"option": {
+				"source": sourceResearchSpeciality,
+				"maxItem": 1
+			}
 		},
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivFromDate?j_string,
@@ -49,7 +66,12 @@
 		},
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivStaffId?j_string,
-			"value": "staffId"
+			"value": "staffId",
+			"type": "select",
+			"option": {
+				"source": sourceStaff,
+				"maxItem": 1
+			}
 			
 		}
 	] />
@@ -57,7 +79,12 @@
 	<#assign columnsNew=[
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivResearchSpecialityId?j_string,
-			"value": "researchSpecialityId"
+			"value": "researchSpecialityId",
+			"type": "select",
+			"option": {
+				"source": sourceResearchSpeciality,
+				"maxItem": 1
+			}
 		},
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivFromDate?j_string,
@@ -71,7 +98,12 @@
 		},
 		{
 			"name": staffResearchSpecialityUiLabelMap.BkEunivStaffId?j_string,
-			"value": "staffId"
+			"value": "staffId",
+			"type": "select",
+			"option": {
+				"source": sourceStaff,
+				"maxItem": 1
+			}
 		}
 	] />
 	
